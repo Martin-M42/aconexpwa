@@ -1,3 +1,4 @@
+// @ts-nocheck
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -11,7 +12,7 @@ import { useNewUser } from '../context/new-user.context';
 
 export const UserData = () => {
 	const { view, newUser } = useNewUser();
-	const { mutate, status } = useCreateUser();
+	const { mutate, status, error } = useCreateUser();
 
 	const handleSubmit = ({ username, password }) => {
 		mutate({ username, password, ...newUser });
@@ -39,8 +40,9 @@ export const UserData = () => {
 				</Fade>
 				{status === 'loading' && <CircularProgress />}
 				{status === 'error' && (
+					// @ts-ignore
 					<Alert severity="error">
-						Hubo un problema creando el usuario. Por favor, intente de nuevo.
+						Error al crear el usuario: {error?.response?.data?.message}
 					</Alert>
 				)}
 				{status === 'success' && (

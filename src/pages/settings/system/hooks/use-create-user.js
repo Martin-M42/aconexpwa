@@ -14,30 +14,21 @@ import { api } from '@/services/api';
  */
 
 /**
- * @param {number} clinicaId
+ * @param {string} clinicaNombre
  * @param {Perfil & {username: string, password: string}} user
  * @param {object} additionalHeaders
  */
-async function createUser(clinicaId, user, additionalHeaders) {
+async function createUser(clinicaNombre, user, additionalHeaders) {
 	const { username, password, ...profile } = user;
+	const newUser = { usuario: { clinicaNombre, username, password }, perfil: profile };
 
-	const profileResponse = await api.post('/perfiles/', profile, additionalHeaders);
-	const res = await api.post(
-		'/usuarios',
-		{
-			clinicaId,
-			perfilId: profileResponse.data.data.id,
-			username,
-			password,
-		},
-		additionalHeaders
-	);
+	const res = await api.post('/usuarios', newUser, additionalHeaders);
 	return res;
 }
 
 export const useCreateUser = () => {
 	const queryClient = useQueryClient();
-	const { id } = useStore((state) => state.clinic);
+	const { username } = useStore((state) => state.clinic);
 	const user = useStore((state) => state.user);
 	const additionalHeaders = {
 		Authorization: `Bearer ${user.token}`,
@@ -46,11 +37,11 @@ export const useCreateUser = () => {
 	 * @param {Perfil & {username: string, password: string}} profile
 	 */
 	const mutationFn = (profile) => {
-		return createUser(id, profile, { headers: { ...additionalHeaders } });
+		return createUser(username, profile, { headers: { ...additionalHeaders } });
 	};
 
 	return useMutation({
 		mutationFn,
-		onSuccess: () => queryClient.invalidateQueries({ queryKey: ['users', id] }),
+		onSuccess: () => queryClient.invalidateQueries({ queryKey: ['users'] }),
 	});
 };

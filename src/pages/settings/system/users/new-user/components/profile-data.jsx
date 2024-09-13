@@ -66,7 +66,7 @@ export const ProfileData = () => {
 									label="Dirección"
 									rules={{ required: false }}
 								/>
-								<TextInput fullWidth name="email" label="Email" rules={{ required: false }} />
+								<TextInput fullWidth name="email" label="Email" />
 								<DatePicker
 									name="nacimiento"
 									label="Nacimiento"
