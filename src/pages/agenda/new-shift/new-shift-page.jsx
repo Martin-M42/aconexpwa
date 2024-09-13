@@ -160,13 +160,35 @@ export const Component = () => {
 				},
 			});
 		} else {
-			datos = {
-				shiftId: shift.id,
-				profesionalId: shift.profesionalId,
-				pacienteId: formdata.patient.id,
-				...datos,
-			};
-			editshiftmutation.mutate(datos, { onSuccess: () => setTimeout(() => navigate(-1), 1_000) });
+			if (!formdata.patient.id && formdata.patient) {
+				let pacienteobj = { nombre: formdata.patient, apellido: ' ' };
+
+				if (datos?.celular) {
+					pacienteobj = { ...pacienteobj, celular: datos.celular };
+				}
+
+				createpatient(pacienteobj, {
+					onSuccess: async (patientdata) => {
+						datos = {
+							shiftId: shift.id,
+							profesionalId: shift.profesionalId,
+							pacienteId: patientdata.data.data.id,
+							...datos,
+						};
+						editshiftmutation.mutate(datos, {
+							onSuccess: () => setTimeout(() => navigate(-1), 1_000),
+						});
+					},
+				});
+			} else {
+				datos = {
+					shiftId: shift.id,
+					profesionalId: shift.profesionalId,
+					pacienteId: formdata.patient.id,
+					...datos,
+				};
+				editshiftmutation.mutate(datos, { onSuccess: () => setTimeout(() => navigate(-1), 1_000) });
+			}
 		}
 	};
 
