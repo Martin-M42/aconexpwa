@@ -27,7 +27,7 @@ export const Component = () => {
 				<Typography paragraph>Especifica el día y descripción del nuevo feriado</Typography>
 				<Form onSubmit={handleSubmit} defaultValues={{ dia: null, descripcion: '' }}>
 					<Stack direction="row" spacing={4} justifyContent="start">
-						<DatePicker name="dia" label="Día" disablePast />
+						<DatePicker name="dia" label="Día" disablePast format="DD/MM/YYYY" />
 						<TextInput
 							name="descripcion"
 							label="Descripción"
