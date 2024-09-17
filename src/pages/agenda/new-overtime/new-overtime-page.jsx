@@ -236,6 +236,7 @@ export const Component = () => {
 									textField: { variant: 'standard', label: 'Fecha' },
 									inputAdornment: { style: { display: 'none' } },
 								}}
+								format="DD/MM/YYYY"
 								readOnly
 								sx={{ flex: '1' }}
 							/>
